@@ -27,13 +27,18 @@ const Home: NextPage = () => {
 
   const getVideos = useCallback(async (idsSearch = "") => {
     try {
+      const formatedIdsSearch = idsSearch
+        .split(",")
+        .map((idSearch: string) => idSearch.replace(/ /g, ""))
+        .join(",");
+
       const { items } = (
         await api.get("videos", {
           params: {
             key: API_YOUTUBE_KEY,
             part: "snippet",
             type: "video",
-            id: idsSearch,
+            id: formatedIdsSearch,
             maxResults: 10,
           },
         })

@@ -1,4 +1,4 @@
-export const API_YOUTUBE_KEY = "";
+export const API_YOUTUBE_KEY = "AIzaSyC_jdzvis3yffW9pY7-cV15qfuwZjQGW5A";
 //use your youtube api key
 
 export const exampleVideoIds = [
