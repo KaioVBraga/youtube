@@ -39,6 +39,7 @@ export default memo(createGlobalStyle`
     --medium-border-radius: 10px;
     --big-border-radius: 20px;
     --transition: .2s ease-in-out;
+    --fast-transition: .1s ease-in-out;
 
     --fonts: Montserrat , 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 

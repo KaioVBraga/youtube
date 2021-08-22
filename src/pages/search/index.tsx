@@ -1,50 +1,88 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/dist/client/router";
 import React, { useState, useCallback, useEffect } from "react";
-import { YoutubeVideoResponse } from "../../@types/Pages/Home/types";
+import { ICardYoutube } from "../../@types/Components/Molecules/CardYoutube/types";
+import { YoutubeSearchResponse } from "../../@types/Pages/Home/types";
 import CardYoutube from "../../components/Molecules/CardYoutube";
 import SearchBar from "../../components/Molecules/SearchBar";
 import TemplateHome from "../../components/Templates/Home";
 import api from "../../services/apis";
-import { API_YOUTUBE_KEY, exampleVideoIds } from "../../utils/constants";
+import { API_YOUTUBE_KEY } from "../../utils/constants";
 
 const Home: NextPage = () => {
-  const [videos, setVideos] = useState([]);
-  const [videoIds, setVideoIds] = useState(exampleVideoIds.toString());
+  const [videos, setVideos] = useState<ICardYoutube[]>([]);
+  const [search, setSearch] = useState("");
 
-  const initialLoad = useCallback(async () => {
-    const { items } = (
-      await api.get("videos", {
-        params: {
-          key: API_YOUTUBE_KEY,
-          part: "snippet",
-          type: "video",
-          id: videoIds,
-          maxResults: 10,
+  const router = useRouter();
+
+  const handleDisplay = useCallback(
+    (display, index) => {
+      const newVideos = [...videos];
+      newVideos[index].display = display;
+      setVideos(newVideos);
+    },
+    [videos]
+  );
+
+  const doSearch = useCallback(async (search) => {
+    try {
+      if (!search) {
+        return;
+      }
+
+      const { items } = (
+        await api.get("search", {
+          params: {
+            key: API_YOUTUBE_KEY,
+            part: "snippet",
+            type: "video",
+            q: search,
+            maxResults: 10,
+          },
+        })
+      ).data;
+
+      const newVideos = items.map((item: YoutubeSearchResponse) => ({
+        video: {
+          id: item.id.videoId,
+          channelId: item.snippet.channelId,
+          description: item.snippet.description,
+          title: item.snippet.title,
+          thumbnails: item.snippet.thumbnails,
         },
-      })
-    ).data;
+        display: false,
+      }));
 
-    const newVideos = items.map((item: YoutubeVideoResponse) => ({
-      id: item.id,
-      channelId: item.snippet.channelId,
-      description: item.snippet.description,
-      title: item.snippet.title,
-      thumbnails: item.snippet.thumbnails,
-    }));
-
-    setVideos(newVideos);
-  }, [videoIds]);
+      setVideos(newVideos);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   useEffect(() => {
-    initialLoad();
-  }, [initialLoad]);
+    const { q } = router.query;
+
+    const qSearch = q.toString();
+
+    if (!qSearch) {
+      return;
+    }
+
+    doSearch(qSearch);
+    setSearch(qSearch);
+  }, [router, doSearch]);
 
   return (
     <TemplateHome>
-      <SearchBar search={videoIds} onChange={setVideoIds} />
+      <SearchBar search={search} onChange={setSearch} doSearch={doSearch} />
 
       {videos.map((video, index) => (
-        <CardYoutube key={index} video={video} />
+        <CardYoutube
+          key={index}
+          video={video.video}
+          display={video.display}
+          onClick={(display) => handleDisplay(display, index)}
+        />
       ))}
     </TemplateHome>
   );

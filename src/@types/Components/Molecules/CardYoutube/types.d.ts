@@ -22,4 +22,11 @@ interface YoutubeVideo {
 
 interface CardYoutubeProps {
   video: YoutubeVideo;
+  display?: boolean;
+  onClick: (value: boolean) => any;
+}
+
+interface ICardYoutube {
+  video: YoutubeVideo;
+  display?: boolean;
 }

@@ -5,6 +5,18 @@ export interface YoutubeVideoResponse {
   snippet: Snippet;
 }
 
+export interface YoutubeSearchResponse {
+  kind: string;
+  etag: string;
+  id: ID;
+  snippet: Snippet;
+}
+
+export interface ID {
+  kind: string;
+  videoId: string;
+}
+
 export interface Snippet {
   publishedAt: Date;
   channelId: string;
