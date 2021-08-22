@@ -12,7 +12,7 @@ import { API_YOUTUBE_KEY, exampleVideoIds } from "../utils/constants";
 const Home: NextPage = () => {
   const [videos, setVideos] = useState<ICardYoutube[]>([]);
   // const [videoIds, setVideoIds] = useState(exampleVideoIds.toString());
-  const [videoIds, setVideoIds] = useState();
+  const [videoIds, setVideoIds] = useState("");
 
   const router = useRouter();
 
@@ -25,46 +25,41 @@ const Home: NextPage = () => {
     [videos]
   );
 
-  const getVideos = useCallback(
-    async (idsSearch = "") => {
-      try {
-        const { items } = (
-          await api.get("videos", {
-            params: {
-              key: API_YOUTUBE_KEY,
-              part: "snippet",
-              type: "video",
-              id: idsSearch || videoIds,
-              maxResults: 10,
-            },
-          })
-        ).data;
-
-        const newVideos = items.map((item: YoutubeVideoResponse) => ({
-          video: {
-            id: item.id,
-            channelId: item.snippet.channelId,
-            description: item.snippet.description,
-            title: item.snippet.title,
-            thumbnails: item.snippet.thumbnails,
+  const getVideos = useCallback(async (idsSearch = "") => {
+    try {
+      const { items } = (
+        await api.get("videos", {
+          params: {
+            key: API_YOUTUBE_KEY,
+            part: "snippet",
+            type: "video",
+            id: idsSearch,
+            maxResults: 10,
           },
-          display: false,
-        }));
+        })
+      ).data;
 
-        setVideos(newVideos);
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    [videoIds]
-  );
+      const newVideos = items.map((item: YoutubeVideoResponse) => ({
+        video: {
+          id: item.id,
+          channelId: item.snippet.channelId,
+          description: item.snippet.description,
+          title: item.snippet.title,
+          thumbnails: item.snippet.thumbnails,
+        },
+        display: false,
+      }));
+
+      setVideos(newVideos);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   useEffect(() => {
     const { ids } = router.query;
 
     if (!ids) {
-      getVideos();
-
       return;
     }
 
@@ -72,14 +67,14 @@ const Home: NextPage = () => {
 
     getVideos(idsSearch);
     setVideoIds(idsSearch);
-  }, [router]);
+  }, [router, getVideos]);
 
   return (
     <TemplateHome>
       <SearchBar
         search={videoIds}
         onChange={setVideoIds}
-        doSearch={getVideos}
+        doSearch={() => getVideos(videoIds)}
       />
 
       {videos.map((video, index) => (

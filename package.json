@@ -8,10 +8,16 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn build"
+    }
+  },
   "dependencies": {
     "@types/styled-components": "^5.1.12",
     "@u-wave/react-youtube": "^0.7.2",
     "axios": "^0.21.1",
+    "husky": "^7.0.1",
     "next": "11.1.0",
     "next-images": "^1.8.1",
     "react": "17.0.2",

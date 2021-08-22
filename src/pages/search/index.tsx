@@ -62,11 +62,11 @@ const Home: NextPage = () => {
   useEffect(() => {
     const { q } = router.query;
 
-    const qSearch = q.toString();
-
-    if (!qSearch) {
+    if (!q) {
       return;
     }
+
+    const qSearch = q.toString();
 
     doSearch(qSearch);
     setSearch(qSearch);
