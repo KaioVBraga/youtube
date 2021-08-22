@@ -41,7 +41,8 @@ export default memo(createGlobalStyle`
     --transition: .2s ease-in-out;
     --fast-transition: .1s ease-in-out;
 
-    --fonts: Montserrat , 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    --fonts: Roboto , 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    /* --fonts: Montserrat , 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important; */
 
     --font-big-size: 3.2rem;
     --font-medium-size: 48px;

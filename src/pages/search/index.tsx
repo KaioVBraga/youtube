@@ -7,7 +7,6 @@ import CardYoutube from "../../components/Molecules/CardYoutube";
 import SearchBar from "../../components/Molecules/SearchBar";
 import TemplateHome from "../../components/Templates/Home";
 import api from "../../services/apis";
-import { API_YOUTUBE_KEY } from "../../utils/constants";
 
 const Home: NextPage = () => {
   const [videos, setVideos] = useState<ICardYoutube[]>([]);
@@ -33,7 +32,6 @@ const Home: NextPage = () => {
       const { items } = (
         await api.get("search", {
           params: {
-            key: API_YOUTUBE_KEY,
             part: "snippet",
             type: "video",
             q: search,
