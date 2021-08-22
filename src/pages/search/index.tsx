@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import React, { useState, useCallback, useEffect } from "react";
-import { YoutubeVideoResponse } from "../@types/Pages/Home/types";
-import CardYoutube from "../components/Molecules/CardYoutube";
-import SearchBar from "../components/Molecules/SearchBar";
-import TemplateHome from "../components/Templates/Home";
-import api from "../services/apis";
-import { API_YOUTUBE_KEY, exampleVideoIds } from "../utils/constants";
+import { YoutubeVideoResponse } from "../../@types/Pages/Home/types";
+import CardYoutube from "../../components/Molecules/CardYoutube";
+import SearchBar from "../../components/Molecules/SearchBar";
+import TemplateHome from "../../components/Templates/Home";
+import api from "../../services/apis";
+import { API_YOUTUBE_KEY, exampleVideoIds } from "../../utils/constants";
 
 const Home: NextPage = () => {
   const [videos, setVideos] = useState([]);
